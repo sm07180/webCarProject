@@ -1,0 +1,154 @@
+
+#title2{	
+	margin-top:10px;
+}
+}
+#title {
+	margin-top: 60px;
+	margin-left: 10px;
+}
+
+#divider {
+	text-align: center;
+	width: 650px;
+	border-top: 1px solid black;
+}
+
+/* #input1 p, p {
+	display: inline;
+}
+
+.red {
+	font-weight: bold;
+	color: #c8040b;
+}
+
+#content {
+	margin: 0 auto;
+	text-align: center;
+}
+
+#input1 {
+	width: 400px;
+	margin: 0 auto;
+}
+
+#input1, .id_input {
+	display: inline;
+	margin-top:50px;
+}
+
+.id_input {
+	margin-left: 50px;
+	width: 250px;
+}
+
+#input2 {
+	width: 400px;
+	margin:0 auto;
+}
+
+#input2, .pw_input {
+	display: inline;
+}
+
+.pw_input {
+	width: 250px;
+	margin-left: 47px;
+}
+
+#input3 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.pwck_input {
+	margin-left: 78px;
+	width: 250px;
+}
+
+#input4 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.name_input {
+	margin-left: 149px;
+	width: 250px;
+}
+
+#input5 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.phone_input {
+	margin-left: 116px;
+	width: 73px;
+}
+
+.phone_input2 {
+	width: 73px;
+}
+
+.phone_input3 {
+	width: 73px;
+}
+
+#input6 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.nickname_input {
+	margin-left: 78px;
+	width: 250px;
+}
+
+#input7 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.img_input {
+	margin-left: 78px;
+	width: 250px;
+}
+
+#input8 {
+	display: inline;
+	margin: 0 auto;
+}
+
+.mileage_input {
+	margin-left: 78px;
+	width: 250px;
+} */
+
+#button_section {
+	width: 400px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.btn-fill {
+	border-radius: 5px;
+}
+
+#user_id_status{
+	margin-left:20px;
+	margin-top:5px;
+	
+}
+
+.valid {
+	color: #006622;
+}
+
+.invalid {
+	color: red;
+}
+
+.valid, .invalid {
+	font-size: 9pt;
+}

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="repair-mapper">
+	<select id="recent_mileage" resultType="myrepair.RepairVO">
+		select max(car_mileage) recent_mileage
+		from car_record
+		where user_id = #{user_id}
+	
+	</select>
+
+	<select id="repairCheck" resultType="myrepair.RepairVO">
+		select * from repair r where repair_id = #{repair_id}
+	</select>
+
+	<!-- 정비한 적이 없는 부품 -->
+	<select id="repairDetail2" resultType="myrepair.RepairVO">
+select (select repair_comment from repair where repair_id = #{repair_id}) repair_comment,
+		(select repair_mile from repair where repair_id = #{repair_id}) repair_mile,
+        max(car_mileage) car_mileage,
+        (select repair_mile from repair where repair_id = #{repair_id}) - max(car_mileage) diff_mileage,
+        (select repair_term from repair where repair_id = #{repair_id}) repair_term, (select repair_name from repair where repair_id = #{repair_id})repair_name,
+        to_char(add_months(min(record_date), (select repair_term from repair where repair_id = #{repair_id})), 'yyyy/MM/dd') goal_date,
+        round((add_months(min(record_date), (select repair_term from repair where repair_id = #{repair_id})) - sysdate)) left_date
+from (select * from car_record where user_id = #{user_id} order by car_mileage desc)
+group by 1
+	</select>
+
+	<!-- 정비한 적이 있는 부품 -->
+	<select id="repairDetail" resultType="myrepair.RepairVO">
+select (select repair_comment from repair where repair_id = #{repair_id}) repair_comment,
+		(select repair_name from repair where repair_id = #{repair_id}) repair_name,
+        (select repair_mile from repair where repair_id = #{repair_id}) repair_mile,
+        (select repair_mile from repair where repair_id = #{repair_id}) - ( max(car_mileage) - (select car_mileage
+                            from (select * from car_record where repair_id = #{repair_id} and
+                                    user_id = #{user_id} order by car_mileage desc)
+                            where rownum = 1)) diff_mileage,
+        (select repair_term from repair where repair_id = #{repair_id}) repair_term,
+        to_char(add_months((select * from (select record_date
+                            from car_record where repair_id = #{repair_id} and user_id = #{user_id} order by car_mileage desc)
+                            where rownum = 1), (select repair_term from repair where repair_id = #{repair_id})), 'yyyy/MM/dd') goal_date,
+        round((add_months((select * from (select record_date
+                            from car_record where repair_id = #{repair_id} and user_id = #{user_id} order by car_mileage desc)
+                            where rownum = 1), (select repair_term from repair where repair_id = #{repair_id})) - sysdate)) left_date
+from (select * from car_record where user_id = #{user_id} order by car_mileage desc) d
+group by 1
+	</select>
+	
+	<select id="repairList" resultType="myrepair.RepairVO">
+select r.*, nvl(repair_mile - ((select max(car_mileage) from car_record where user_id = #{user_id})
+                    - (select max(car_mileage) from car_record where repair_id = r.repair_id and user_id = #{user_id})),
+                   repair_mile - (select max(car_mileage) from car_record where user_id = #{user_id})) left_mileage
+from repair r
+	</select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="record-mapper">
+	<delete id="record_delete">
+		delete from car_record where record_id = #{record_id}
+	</delete>
+
+	<select id="myRecord" resultType="myrecord.RecordVO">
+		select to_char(record_date, 'MM/dd') record_date, oil, oil_cost,
+        	(select repair_name from repair where repair_id = c.repair_id) repair_name,
+        	repair_cost, user_id, memo, station, (to_char(record_date, 'yyyy/MM')) year_month,
+        	repair_id, car_mileage, record_id
+		from car_record c
+		where user_id = #{user_id} <include refid="record_date" />
+		order by 1 desc, 11 desc
+	</select>
+	
+	
+	<sql id="record_date">
+		<if test="record_date != '0000/00'">
+			and to_char(record_date, 'yyyy/MM') = #{record_date}
+		</if>
+	</sql>
+	
+	
+	<select id="year_month" resultType="myrecord.RecordVO">
+	select distinct (to_char(record_date, 'yyyy/MM')) year_month
+	from car_record
+	where user_id = #{user_id}
+	order by 1 desc
+	</select>
+
+	<insert id="oilinsert">
+		insert into car_record(record_date, oil, oil_cost,car_mileage,user_id,station)
+		values(#{date}, #{oil_l}, #{oil_cost},#{mymileage},#{user_id},#{comp_name})
+	</insert>
+	
+	<insert id="repairInsert">
+		insert into car_record(record_date, car_mileage, user_id, repair_id, repair_cost, memo)
+		values(#{record_date}, #{car_mileage}, #{user_id}, #{repair_id}, #{repair_cost}, #{memo})
+	</insert>
+	
+</mapper>

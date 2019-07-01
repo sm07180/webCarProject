@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tip-mapper">
+	<update id="tt_reply_update">
+		update tt_reply
+		set tt_reply_content = #{tt_reply_content}
+		where tt_reply_id = #{tt_reply_id}
+	</update>
+
+	<delete id="tt_reply_delete">
+		delete from tt_reply where tt_reply_id = #{tt_reply_id}
+	</delete>
+
+	<insert id="tt_reply_insert">
+		insert into tt_reply(tt_id, user_id, tt_reply_content)
+		values(#{tt_id}, #{user_id}, #{tt_reply_content})
+	</insert>
+
+	<select id="tt_reply_list" resultType="tip.TTReplyVO">
+		select tt_reply_content, to_char(tt_reply_date, 'yyyy-MM-dd') tt_reply_date,
+		tt_id, tt_reply_id, user_id,
+		(select car_nickname from car_info where user_id = tt_reply.user_id ) car_nickname
+		from tt_reply
+		where tt_id = #{tt_id}
+		order by tt_reply_id desc
+	</select>
+
+<select id="detail" resultType="tip.TipVO">
+	select t.*,(select m.user_name from member m where m.user_id=t.user_id) user_name from tt t where tt_id=#{tt_id}
+</select>
+
+<update id="read">
+		update tt set readcnt = readcnt +1 where tt_id=#{tt_id}
+	</update>
+
+<select id="list" resultType="tip.TipVO">
+select n.*,(select m.user_name from member m where m.user_id=n.user_id) user_name
+from (select n.*, rownum no from (select * from tt <include refid="search"/> order by tt_id) n
+order by no desc) n
+where no between #{beginList} and #{endList}
+</select>
+<select id="total" resultType="integer">
+	select count(*) from tt <include refid="search"/>
+</select>
+<sql id="search">
+	<if test="search=='all'">
+		where tt_title like '%'||#{keyword}||'%'
+		or user_id  like '%'||#{keyword}||'%'
+		or tt_content  like '%'||#{keyword}||'%'		
+	</if>	
+	<if test="search=='user_id' or search=='tt_title' or search=='tt_content'">
+		where ${search} like '%'||#{keyword}||'%'
+	</if>
+</sql> 
+
+	<select id="list2" resultType="tip.TipVO">
+		select n.* from
+		(select n.*,rownum no
+		from (select * from tt
+		) n order by no desc) n
+		where no between
+		#{beginList} and #{endList}
+	</select>
+ 
+	<select id="total2" resultType="integer">
+		select count(*) from tt
+	</select>
+	<select id="detail2" resultType="tip.TipVO">
+		select * from tt where tt_id = #{tt_id}
+	</select>
+	
+	<update id="update2">
+		update tt set tt_title=#{tt_title},tt_content=#{tt_content},tt_date=sysdate
+		where tt_id=#{tt_id}
+	</update>
+	
+	<delete id="delete2">
+		delete from tt where tt_id=#{tt_id}
+	</delete>
+	<delete id="boarddelete">
+		delete from board where board_id=#{tt_id}
+	</delete>
+	
+	
+	<insert id="insert2">
+		insert into tt (tt_title, tt_content,user_id)
+		values (#{tt_title}, #{tt_content},#{user_id})
+		<!-- jdbcType=VARCHAR : filename 값이 없으면 null로 인서트함 </insert>-->
+	</insert> 
+	 
+	 <select id="fullselect2" resultType="tip.TipVO">
+		SELECT 
+		ROW_NUMBER() OVER(ORDER BY tt_date) AS no,
+		A.* FROM tt A
+		ORDER BY 1 desc
+	</select>
+</mapper>

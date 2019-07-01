@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="connectcnt-mapper">
+
+	<select id="setTotalCnt" statementType="CALLABLE">
+
+		{call pro_visit}
+
+	</select>
+
+	<select id="writeDetail" resultType="connectcnt.ConnectCntVO">
+		select ${title_name}_id write_id,${title_name}_title
+		title,${title_name}_date write_date,readcnt,${title_name}_content
+		content from ${title_name} where ${title_name}_id=#{write_id}
+	</select>
+
+	<select id="writeList" resultType="connectcnt.ConnectCntVO">
+		select '게시글' gubun,
+		board_title title,'board' title_name, to_char(board_date,
+		'yyyy-mm-dd') write_date , readcnt,board_id write_id
+		from board
+		where user_id=#{user_id}
+		union all
+		select '팁글' , tt_title,'tt', to_char(tt_date, 'yyyy-mm-dd') , readcnt,tt_id
+		from tt
+		where user_id=#{user_id}
+
+	</select>
+
+	<select id="getVisitCnt" resultType="HashMap">
+		select sum(cnt) totalCnt,
+		(select cnt todayCnt from visit where to_char(v_date, 'yyyymmdd') =
+		to_char(sysdate, 'yyyymmdd')) todayCnt
+		from visit
+		group by 2
+	</select>
+
+	<select id="memberList" resultType="member.MemberVO">
+		select * from member
+	</select>
+
+	<update id="rittalAdminN">
+		update member
+		set admin = 'N'
+		where user_id =
+		#{user_id}
+	</update>
+
+	<update id="rittalAdminY">
+		update member
+		set admin = 'Y'
+		where user_id =
+		#{user_id}
+	</update>
+
+	<select id="rittalCnt" resultType="HashMap">
+		select
+		r.*,d.*,(ttcnt+boardcnt) totalcnt,m.* from
+		(select count(*) ttcnt from tt where user_id=#{user_id}) t,
+		(select count(*) boardcnt from board where user_id=#{user_id}) b,
+		(select count(*) replycnt from reply where user_id=#{user_id}) r,
+		(select m.user_name,m.phone,m.admin,c.* ,
+		(select max(car_mileage) from
+		car_record d where d.user_id = m.user_id)car_mileage
+		from
+		member m,car_info c
+		where
+		m.user_id=#{user_id} and
+		m.user_id=c.user_id) m,
+		(select to_char(min(record_date),'YYYY-MM-dd') joindate from car_record where
+		user_id=#{user_id}) d
+	</select>
+
+
+
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member-mapper">
+
+	<select id="login" resultType="member.MemberVO">
+		select fn_decrypt(m.user_pw)
+		user_pw,m.user_name,m.phone,m.admin,c.* ,
+		(select max(car_mileage) from car_record d where d.user_id = m.user_id)car_mileage 
+		from
+		member m,car_info c 
+		where
+		m.user_id=#{user_id} and
+		m.user_pw=fn_encrypt(#{user_pw}) and
+		m.user_id=c.user_id
+	</select>
+
+	<insert id="recordinsert">
+		insert into
+		car_record(user_id, car_mileage)
+		values (#{user_id},#{car_mileage})
+	</insert>
+	<insert id="insert">
+		insert into
+		member(user_id, user_pw, user_name, phone)
+		values (#{user_id}, fn_encrypt(#{user_pw}), #{user_name}, #{phone} )
+	</insert>
+
+	<insert id="carinfo_insert">
+		insert into
+		car_info(user_id, comp_id, car_name,car_nickname,car_mimage,car_image)
+		values (#{user_id},#{comp_id}, #{car_name},#{car_nickname},#{mfilepath,
+		jdbcType=VARCHAR},#{filepath,
+		jdbcType=VARCHAR})
+	</insert>
+
+	<select id="id_check" resultType="integer">
+		select count(*) from member where user_id = #{user_id}
+	</select>
+
+	<select id="carlist" resultType="member.CarVO">
+		select comp_id from company
+	</select>
+
+	<select id="carNameList" resultType="member.CarVO">
+		select car_name from car where comp_id=#{comp_id}
+	</select>
+
+	<update id="car_update">
+		update car_info set
+		comp_id=#{comp_id},car_name=#{car_name},car_nickname=#{car_nickname},car_image=#{filepath,
+		jdbcType=VARCHAR},car_mimage=#{mfilepath,
+		jdbcType=VARCHAR}
+		where
+		user_id=#{user_id}
+	</update>
+
+	<update id="info_update">
+		update member set
+		user_pw=fn_encrypt(#{user_pw}),user_name=#{user_name},phone=#{phone}
+		where
+		user_id=#{user_id}
+	</update>
+	
+	<delete id="delete">
+		delete from member where user_id=#{user_id}
+	</delete>
+
+</mapper>

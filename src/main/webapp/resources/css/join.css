@@ -1,0 +1,118 @@
+#title {
+	margin-top: 60px;
+	margin-left: 200px;
+}
+
+#divider {
+	margin-left: 200px;
+	width: 600px;
+	border-top: 1px solid black;
+	/* margin: 0 auto; */
+}
+
+#input1 p, p {
+	display: inline;
+}
+
+.red {
+	font-weight: bold;
+	color: #c8040b;
+}
+
+#content {
+	margin: 0 auto;
+	/* text-align: center; */
+}
+
+#input1 {
+	margin-left: 190px;
+	margin-top: 50px;
+}
+
+#input1, .id_input {
+	display: inline;
+	margin-top: 40px;
+}
+
+.id_input {
+	margin-left: 130px;
+	width: 250px;
+}
+
+#input2 {
+	margin-left: 190px;
+}
+
+#input2, .pw_input {
+	display: inline;
+}
+
+.pw_input {
+	width: 250px;
+	margin-left: 116px;
+}
+
+#input3 {
+	display: inline;
+	margin-left: 190px;
+}
+
+.pwck_input {
+	margin-left: 78px;
+	width: 250px;
+}
+
+#input4 {
+	display: inline;
+	margin-left: 190px;
+}
+
+.name_input {
+	margin-left: 149px;
+	width: 250px;
+}
+
+#input5 {
+	display: inline;
+	margin-left: 190px;
+}
+
+.phone_input {
+	margin-left: 116px;
+	width: 73px;
+}
+
+.phone_input2 {
+	width: 73px;
+}
+
+.phone_input3 {
+	width: 73px;
+}
+
+#button_section {
+	width: 400px;
+	text-align: center;
+	margin: 0 auto;
+}
+
+.btn-fill {
+	border-radius: 5px;
+}
+
+#user_id_status, #user_pw_status, #user_pw_ck_status, #user_name_status,
+	#user_phone_status {
+	margin-left: 393px;
+}
+
+.valid {
+	color: #006622;
+}
+
+.invalid {
+	color: red;
+}
+
+.valid, .invalid {
+	font-size: 9pt;
+}
